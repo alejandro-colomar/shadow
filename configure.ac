@@ -401,6 +401,9 @@ AC_SUBST(LIYESCRYPT)
 AC_CHECK_LIB(crypt, crypt, [LIYESCRYPT=-lcrypt],
 	[AC_MSG_ERROR([crypt() not found])])
 
+AC_CHECK_HEADERS(/usr/include/bsd/readpassphrase.h,
+	[AC_DEFINE(BSD_INCLUDE, 1, [Build shadow with libbsd support])])
+
 AC_SUBST(LIBACL)
 if test "$with_acl" != "no"; then
 	AC_CHECK_HEADERS(acl/libacl.h attr/error_context.h, [acl_header="yes"], [acl_header="no"])

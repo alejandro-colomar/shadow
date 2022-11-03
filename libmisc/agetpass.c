@@ -26,8 +26,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include <limits.h>
+#ifdef BSD_INCLUDE
+#include <bsd/readpassphrase.h>
+#else
 #include <readpassphrase.h>
+#endif /* BSD_INCLUDE */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
