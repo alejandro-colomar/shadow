@@ -33,7 +33,8 @@
 #include <time.h>
 
 #include "alloc.h"
-#include "atoi/a2i.h"
+#include "atoi/a2i/a2i.h"
+#include "atoi/a2i/a2s.h"
 #include "atoi/getnum.h"
 #include "chkname.h"
 #include "defines.h"

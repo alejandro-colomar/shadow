@@ -23,8 +23,9 @@
 #endif
 
 #include "alloc.h"
-#include "atoi/a2i.h"
-#include "atoi/str2i.h"
+#include "atoi/a2i/a2s.h"
+#include "atoi/a2i/a2u.h"
+#include "atoi/str2i/str2u.h"
 #include "getdef.h"
 #include "shadowlog_internal.h"
 #include "string/sprintf.h"

@@ -14,7 +14,7 @@
 #include <strings.h>
 
 #include "alloc.h"
-#include "atoi/a2i.h"
+#include "atoi/a2i/a2u.h"
 #include "prototypes.h"
 #include "string/stpeprintf.h"
 #include "idmapping.h"
