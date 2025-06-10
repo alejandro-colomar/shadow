@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "prototypes.h"
 #include "shadow/gshadow/sgrp.h"
 #include "string/strcmp/streq.h"
-#include "string/strtok/astrsep2ls.h"
 #include "string/strtok/stpsep.h"
 #include "string/strtok/strsep2arr.h"
 
@@ -26,9 +26,6 @@
 
 #if defined(SHADOWGRP) && !__has_include(<gshadow.h>)
 static struct sgrp  sgroup = {};
-
-
-static char **build_list(char *s);
 
 
 // from-string get shadow group entry
@@ -62,22 +59,5 @@ sgetsgent(const char *s)
 		return NULL;
 
 	return &sgroup;
-}
-
-
-static char **
-build_list(char *s)
-{
-	char    **l;
-	size_t  n;
-
-	l = astrsep2ls(s, ",", &n);
-	if (l == NULL)
-		return NULL;
-
-	if (streq(l[n-1], ""))
-		l[n-1] = NULL;
-
-	return l;
 }
 #endif
