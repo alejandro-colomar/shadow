@@ -22,6 +22,7 @@
 #include "atoi/str2i.h"
 #include "defines.h"
 #include "faillog.h"
+#include "io/fprintf/eprintf.h"
 #include "prototypes.h"
 /*@-exitarg@*/
 #include "exitcodes.h"
@@ -100,8 +101,7 @@ static off_t lookup_faillog(struct faillog *fl, uid_t uid)
 
 	/* Ensure multiplication does not overflow and retrieving a wrong entry */
 	if (__builtin_mul_overflow(uid, sizeof(*fl), &offset)) {
-		fprintf(stderr,
-		        _("%s: Failed to get the entry for UID %lu\n"),
+		eprintf(_("%s: Failed to get the entry for UID %lu\n"),
 		        Prog, (unsigned long)uid);
 		return -1;
 	}
@@ -116,8 +116,7 @@ static off_t lookup_faillog(struct faillog *fl, uid_t uid)
 		 * empty entry in this case.
 		 */
 		if (fread(fl, sizeof(*fl), 1, fail) != 1) {
-			fprintf(stderr,
-			        _("%s: Failed to get the entry for UID %lu\n"),
+			eprintf(_("%s: Failed to get the entry for UID %lu\n"),
 			        Prog, (unsigned long)uid);
 			return -1;
 		}
@@ -170,7 +169,7 @@ static void print_one (/*@null@*/const struct passwd *pw, bool force)
 
 	tm = localtime (&fl.fail_time);
 	if (!tm) {
-		fprintf (stderr, "Cannot read time from faillog.\n");
+		eprintf("Cannot read time from faillog.\n");
 		return;
 	}
 	STRFTIME(ptime, "%D %H:%M:%S %z", tm);
@@ -250,8 +249,7 @@ static bool reset_one (uid_t uid)
 		return false;
 	}
 
-	fprintf (stderr,
-	         _("%s: Failed to reset fail count for UID %lu\n"),
+	eprintf(_("%s: Failed to reset fail count for UID %lu\n"),
 	         Prog, (unsigned long)uid);
 	return true;
 }
@@ -346,8 +344,7 @@ static bool setmax_one (uid_t uid, short max)
 		return false;
 	}
 
-	fprintf (stderr,
-	         _("%s: Failed to set max for UID %lu\n"),
+	eprintf(_("%s: Failed to set max for UID %lu\n"),
 	         Prog, (unsigned long)uid);
 	return true;
 }
@@ -444,8 +441,7 @@ static bool set_locktime_one (uid_t uid, long locktime)
 		return false;
 	}
 
-	fprintf (stderr,
-	         _("%s: Failed to set locktime for UID %lu\n"),
+	eprintf(_("%s: Failed to set locktime for UID %lu\n"),
 	         Prog, (unsigned long)uid);
 	return true;
 }
@@ -549,8 +545,7 @@ int main (int argc, char **argv)
 				/*@notreached@*/break;
 			case 'l':
 				if (str2sl(&fail_locktime, optarg) == -1) {
-					fprintf (stderr,
-					         _("%s: invalid numeric argument '%s'\n"),
+					eprintf(_("%s: invalid numeric argument '%s'\n"),
 					         Prog, optarg);
 					exit (E_BAD_ARG);
 				}
@@ -559,8 +554,7 @@ int main (int argc, char **argv)
 			case 'm':
 			{
 				if (str2sh(&fail_max, optarg) == -1) {
-					fprintf (stderr,
-					         _("%s: invalid numeric argument '%s'\n"),
+					eprintf(_("%s: invalid numeric argument '%s'\n"),
 					         Prog, optarg);
 					exit (E_BAD_ARG);
 				}
@@ -574,8 +568,7 @@ int main (int argc, char **argv)
 				break;
 			case 't':
 				if (str2sl(&days, optarg) == -1) {
-					fprintf (stderr,
-					         _("%s: invalid numeric argument '%s'\n"),
+					eprintf(_("%s: invalid numeric argument '%s'\n"),
 					         Prog, optarg);
 					exit (E_BAD_ARG);
 				}
@@ -605,8 +598,7 @@ int main (int argc, char **argv)
 					if (getrange(optarg,
 					             &umin, &has_umin,
 					             &umax, &has_umax) == -1) {
-						fprintf (stderr,
-						         _("%s: Unknown user or range: %s\n"),
+						eprintf(_("%s: Unknown user or range: %s\n"),
 						         Prog, optarg);
 						exit (E_BAD_ARG);
 					}
@@ -619,8 +611,7 @@ int main (int argc, char **argv)
 			}
 		}
 		if (argc > optind) {
-			fprintf (stderr,
-			         _("%s: unexpected argument: %s\n"),
+			eprintf(_("%s: unexpected argument: %s\n"),
 			         Prog, argv[optind]);
 			usage (EXIT_FAILURE);
 		}
@@ -637,16 +628,14 @@ int main (int argc, char **argv)
 		fail = fopen (FAILLOG_FILE, "r");
 	}
 	if (NULL == fail) {
-		fprintf (stderr,
-		         _("%s: Cannot open %s: %s\n"),
+		eprintf(_("%s: Cannot open %s: %s\n"),
 		        Prog, FAILLOG_FILE, strerrno());
 		exit (E_NOPERM);
 	}
 
 	/* Get the size of the faillog */
 	if (fstat (fileno (fail), &statbuf) != 0) {
-		fprintf (stderr,
-		         _("%s: Cannot get the size of %s: %s\n"),
+		eprintf(_("%s: Cannot get the size of %s: %s\n"),
 		        Prog, FAILLOG_FILE, strerrno());
 		exit (E_NOPERM);
 	}
@@ -672,8 +661,7 @@ int main (int argc, char **argv)
 		    || (fflush (fail) != 0)
 		    || (fsync  (fileno (fail)) != 0)
 		    || (fclose (fail) != 0)) {
-			fprintf (stderr,
-			         _("%s: Failed to write %s: %s\n"),
+			eprintf(_("%s: Failed to write %s: %s\n"),
 			        Prog, FAILLOG_FILE, strerrno());
 			(void) fclose (fail);
 			errors = true;
