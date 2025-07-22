@@ -92,7 +92,7 @@ static void fail_exit (int code, bool process_selinux)
 	if (pw_locked) {
 		if (pw_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, pw_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", pw_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", pw_dbname());
 			/* continue */
 		}
 	}
@@ -100,7 +100,7 @@ static void fail_exit (int code, bool process_selinux)
 	if (spw_locked) {
 		if (spw_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, spw_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", spw_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", spw_dbname());
 			/* continue */
 		}
 	}
@@ -324,7 +324,7 @@ static void check_perms (void)
 
 	if (PAM_SUCCESS != retval) {
 		eprintf(_("%s: PAM: %s\n"), Prog, pam_strerror(pamh, retval));
-		SYSLOG((LOG_ERR, "%s", pam_strerror (pamh, retval)));
+		SYSLOG(LOG_ERR, "%s", pam_strerror(pamh, retval));
 		if (NULL != pamh) {
 			(void) pam_end (pamh, retval);
 		}
@@ -387,12 +387,12 @@ static void close_files (struct option_flags *flags)
 		if (spw_close (process_selinux) == 0) {
 			eprintf(_("%s: failure while writing changes to %s\n"),
 			         Prog, spw_dbname ());
-			SYSLOG ((LOG_ERR, "failure while writing changes to %s", spw_dbname ()));
+			SYSLOG(LOG_ERR, "failure while writing changes to %s", spw_dbname());
 			fail_exit (1, process_selinux);
 		}
 		if (spw_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, spw_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", spw_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", spw_dbname());
 			/* continue */
 		}
 		spw_locked = false;
@@ -401,12 +401,12 @@ static void close_files (struct option_flags *flags)
 	if (pw_close (process_selinux) == 0) {
 		eprintf(_("%s: failure while writing changes to %s\n"),
 		         Prog, pw_dbname ());
-		SYSLOG ((LOG_ERR, "failure while writing changes to %s", pw_dbname ()));
+		SYSLOG(LOG_ERR, "failure while writing changes to %s", pw_dbname());
 		fail_exit (1, process_selinux);
 	}
 	if (pw_unlock (process_selinux) == 0) {
 		eprintf(_("%s: failed to unlock %s\n"), Prog, pw_dbname());
-		SYSLOG ((LOG_ERR, "failed to unlock %s", pw_dbname ()));
+		SYSLOG(LOG_ERR, "failed to unlock %s", pw_dbname());
 		/* continue */
 	}
 	pw_locked = false;
