@@ -494,9 +494,7 @@ static void close_files (struct option_flags *flags)
 	              group_name, AUDIT_NO_ID,
 	              SHADOW_AUDIT_SUCCESS);
 #endif
-	SYSLOG ((LOG_INFO,
-	         "group changed in %s (%s)",
-	         gr_dbname (), info_group.action));
+	SYSLOG(LOG_INFO, "group changed in %s (%s)", gr_dbname(), info_group.action);
 	del_cleanup (cleanup_report_mod_group);
 
 	cleanup_unlock_group (&process_selinux);
@@ -523,9 +521,8 @@ static void close_files (struct option_flags *flags)
 		              group_name, AUDIT_NO_ID,
 		              SHADOW_AUDIT_SUCCESS);
 #endif
-		SYSLOG ((LOG_INFO,
-		         "group changed in %s (%s)",
-		         sgr_dbname (), info_gshadow.action));
+		SYSLOG(LOG_INFO, "group changed in %s (%s)",
+		       sgr_dbname(), info_gshadow.action);
 		del_cleanup (cleanup_report_mod_gshadow);
 
 		cleanup_unlock_gshadow (&process_selinux);
@@ -545,9 +542,8 @@ static void close_files (struct option_flags *flags)
 		              group_name, AUDIT_NO_ID,
 		              SHADOW_AUDIT_SUCCESS);
 #endif
-		SYSLOG ((LOG_INFO,
-		         "group changed in %s (%s)",
-		         pw_dbname (), info_passwd.action));
+		SYSLOG(LOG_INFO, "group changed in %s (%s)",
+		       pw_dbname(), info_passwd.action);
 		del_cleanup (cleanup_report_mod_passwd);
 
 		cleanup_unlock_passwd (&process_selinux);
@@ -701,7 +697,7 @@ static void open_files (void)
 {
 	if (gr_open (O_CREAT | O_RDWR) == 0) {
 		eprintf(_("%s: cannot open %s\n"), Prog, gr_dbname());
-		SYSLOG ((LOG_WARN, "cannot open %s", gr_dbname ()));
+		SYSLOG(LOG_WARN, "cannot open %s", gr_dbname());
 		exit (E_GRP_UPDATE);
 	}
 
@@ -710,7 +706,7 @@ static void open_files (void)
 	    && (pflg || nflg || user_list)) {
 		if (sgr_open (O_CREAT | O_RDWR) == 0) {
 			eprintf(_("%s: cannot open %s\n"), Prog, sgr_dbname());
-			SYSLOG ((LOG_WARN, "cannot open %s", sgr_dbname ()));
+			SYSLOG(LOG_WARN, "cannot open %s", sgr_dbname());
 			exit (E_GRP_UPDATE);
 		}
 	}
@@ -719,7 +715,7 @@ static void open_files (void)
 	if (gflg) {
 		if (pw_open (O_CREAT | O_RDWR) == 0) {
 			eprintf(_("%s: cannot open %s\n"), Prog, pw_dbname());
-			SYSLOG ((LOG_WARN, "cannot open %s", gr_dbname ()));
+			SYSLOG(LOG_WARN, "cannot open %s", gr_dbname());
 			exit (E_GRP_UPDATE);
 		}
 	}
@@ -813,7 +809,7 @@ int main (int argc, char **argv)
 
 	if (PAM_SUCCESS != retval) {
 		eprintf(_("%s: PAM: %s\n"), Prog, pam_strerror(pamh, retval));
-		SYSLOG((LOG_ERR, "%s", pam_strerror (pamh, retval)));
+		SYSLOG(LOG_ERR, "%s", pam_strerror(pamh, retval));
 		if (NULL != pamh) {
 			(void) pam_end (pamh, retval);
 		}

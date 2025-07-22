@@ -441,7 +441,7 @@ static void check_perms (bool process_selinux)
 		if (PAM_SUCCESS != retval) {
 			eprintf(_("%s: PAM: %s\n"),
 			         Prog, pam_strerror (pamh, retval));
-			SYSLOG((LOG_ERR, "%s", pam_strerror (pamh, retval)));
+			SYSLOG(LOG_ERR, "%s", pam_strerror(pamh, retval));
 			if (NULL != pamh) {
 				(void) pam_end (pamh, retval);
 			}
@@ -457,7 +457,7 @@ static void fail_exit (int code, bool process_selinux)
 	if (gr_locked) {
 		if (gr_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, gr_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", gr_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", gr_dbname());
 			/* continue */
 		}
 	}
@@ -466,7 +466,7 @@ static void fail_exit (int code, bool process_selinux)
 	if (sgr_locked) {
 		if (sgr_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sgr_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sgr_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sgr_dbname());
 			/* continue */
 		}
 	}
@@ -520,13 +520,13 @@ static void close_files (struct option_flags *flags)
 
 	if ((gr_close (process_selinux) == 0) && !list) {
 		eprintf(_("%s: failure while writing changes to %s\n"), Prog, gr_dbname());
-		SYSLOG ((LOG_ERR, "failure while writing changes to %s", gr_dbname ()));
+		SYSLOG(LOG_ERR, "failure while writing changes to %s", gr_dbname());
 		fail_exit (EXIT_GROUP_FILE, process_selinux);
 	}
 	if (gr_locked) {
 		if (gr_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, gr_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", gr_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", gr_dbname());
 			/* continue */
 		}
 		gr_locked = false;
@@ -536,13 +536,13 @@ static void close_files (struct option_flags *flags)
 	if (is_shadowgrp) {
 		if ((sgr_close (process_selinux) == 0) && !list) {
 			eprintf(_("%s: failure while writing changes to %s\n"), Prog, sgr_dbname());
-			SYSLOG ((LOG_ERR, "failure while writing changes to %s", sgr_dbname ()));
+			SYSLOG(LOG_ERR, "failure while writing changes to %s", sgr_dbname());
 			fail_exit (EXIT_GROUP_FILE, process_selinux);
 		}
 		if (sgr_locked) {
 			if (sgr_unlock (process_selinux) == 0) {
 				eprintf(_("%s: failed to unlock %s\n"), Prog, sgr_dbname());
-				SYSLOG ((LOG_ERR, "failed to unlock %s", sgr_dbname ()));
+				SYSLOG(LOG_ERR, "failed to unlock %s", sgr_dbname());
 				/* continue */
 			}
 			sgr_locked = false;

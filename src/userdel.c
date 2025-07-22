@@ -222,8 +222,8 @@ static void update_groups (bool process_selinux)
 		              user_name, user_id, "grp", ngrp->gr_name,
 		              SHADOW_AUDIT_SUCCESS);
 #endif				/* WITH_AUDIT */
-		SYSLOG ((LOG_INFO, "delete '%s' from group '%s'\n",
-			 user_name, ngrp->gr_name));
+		SYSLOG(LOG_INFO, "delete '%s' from group '%s'\n",
+			user_name, ngrp->gr_name);
 	}
 
 	if (getdef_bool ("USERGROUPS_ENAB")) {
@@ -282,8 +282,8 @@ static void update_groups (bool process_selinux)
 		              user_name, user_id, nsgrp->sg_namp, "grp",
 		              SHADOW_AUDIT_SUCCESS);
 #endif				/* WITH_AUDIT */
-		SYSLOG ((LOG_INFO, "delete '%s' from shadow group '%s'\n",
-		         user_name, nsgrp->sg_namp));
+		SYSLOG(LOG_INFO, "delete '%s' from shadow group '%s'\n",
+		       user_name, nsgrp->sg_namp);
 	}
 #endif				/* SHADOWGRP */
 }
@@ -357,9 +357,8 @@ static void remove_usergroup (bool process_selinux)
 		              user_name, AUDIT_NO_ID, "grp", user_name,
 		              SHADOW_AUDIT_SUCCESS);
 #endif				/* WITH_AUDIT */
-		SYSLOG ((LOG_INFO,
-		         "removed group '%s' owned by '%s'\n",
-		         user_name, user_name));
+		SYSLOG(LOG_INFO, "removed group '%s' owned by '%s'\n",
+		       user_name, user_name);
 
 #ifdef	SHADOWGRP
 		if (sgr_locate (user_name) != NULL) {
@@ -374,9 +373,8 @@ static void remove_usergroup (bool process_selinux)
 			              user_name, AUDIT_NO_ID, "grp", user_name,
 			              SHADOW_AUDIT_SUCCESS);
 #endif				/* WITH_AUDIT */
-			SYSLOG ((LOG_INFO,
-			         "removed shadow group '%s' owned by '%s'\n",
-			         user_name, user_name));
+			SYSLOG(LOG_INFO, "removed shadow group '%s' owned by '%s'\n",
+			       user_name, user_name);
 
 		}
 #endif				/* SHADOWGRP */
@@ -397,12 +395,12 @@ static void close_files (struct option_flags *flags)
 
 	if (pw_close (process_selinux) == 0) {
 		eprintf(_("%s: failure while writing changes to %s\n"), Prog, pw_dbname());
-		SYSLOG ((LOG_ERR, "failure while writing changes to %s", pw_dbname ()));
+		SYSLOG(LOG_ERR, "failure while writing changes to %s", pw_dbname());
 		fail_exit (E_PW_UPDATE, process_selinux);
 	}
 	if (pw_unlock (process_selinux) == 0) {
 		eprintf(_("%s: failed to unlock %s\n"), Prog, pw_dbname());
-		SYSLOG ((LOG_ERR, "failed to unlock %s", pw_dbname ()));
+		SYSLOG(LOG_ERR, "failed to unlock %s", pw_dbname());
 		/* continue */
 	}
 	pw_locked = false;
@@ -410,12 +408,12 @@ static void close_files (struct option_flags *flags)
 	if (is_shadow_pwd) {
 		if (spw_close (process_selinux) == 0) {
 			eprintf(_("%s: failure while writing changes to %s\n"), Prog, spw_dbname());
-			SYSLOG ((LOG_ERR, "failure while writing changes to %s", spw_dbname ()));
+			SYSLOG(LOG_ERR, "failure while writing changes to %s", spw_dbname());
 			fail_exit (E_PW_UPDATE, process_selinux);
 		}
 		if (spw_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, spw_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", spw_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", spw_dbname());
 			/* continue */
 		}
 		spw_locked = false;
@@ -423,12 +421,12 @@ static void close_files (struct option_flags *flags)
 
 	if (gr_close (process_selinux) == 0) {
 		eprintf(_("%s: failure while writing changes to %s\n"), Prog, gr_dbname());
-		SYSLOG ((LOG_ERR, "failure while writing changes to %s", gr_dbname ()));
+		SYSLOG(LOG_ERR, "failure while writing changes to %s", gr_dbname());
 		fail_exit (E_GRP_UPDATE, process_selinux);
 	}
 	if (gr_unlock (process_selinux) == 0) {
 		eprintf(_("%s: failed to unlock %s\n"), Prog, gr_dbname());
-		SYSLOG ((LOG_ERR, "failed to unlock %s", gr_dbname ()));
+		SYSLOG(LOG_ERR, "failed to unlock %s", gr_dbname());
 		/* continue */
 	}
 	gr_locked = false;
@@ -437,13 +435,13 @@ static void close_files (struct option_flags *flags)
 	if (is_shadow_grp) {
 		if (sgr_close (process_selinux) == 0) {
 			eprintf(_("%s: failure while writing changes to %s\n"), Prog, sgr_dbname());
-			SYSLOG ((LOG_ERR, "failure while writing changes to %s", sgr_dbname ()));
+			SYSLOG(LOG_ERR, "failure while writing changes to %s", sgr_dbname());
 			fail_exit (E_GRP_UPDATE, process_selinux);
 		}
 
 		if (sgr_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sgr_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sgr_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sgr_dbname());
 			/* continue */
 		}
 		sgr_locked = false;
@@ -454,12 +452,12 @@ static void close_files (struct option_flags *flags)
 	if (is_sub_uid) {
 		if (sub_uid_close (process_selinux) == 0) {
 			eprintf(_("%s: failure while writing changes to %s\n"), Prog, sub_uid_dbname());
-			SYSLOG ((LOG_ERR, "failure while writing changes to %s", sub_uid_dbname ()));
+			SYSLOG(LOG_ERR, "failure while writing changes to %s", sub_uid_dbname());
 			fail_exit (E_SUB_UID_UPDATE, process_selinux);
 		}
 		if (sub_uid_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sub_uid_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sub_uid_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sub_uid_dbname());
 			/* continue */
 		}
 		sub_uid_locked = false;
@@ -468,12 +466,12 @@ static void close_files (struct option_flags *flags)
 	if (is_sub_gid) {
 		if (sub_gid_close (process_selinux) == 0) {
 			eprintf(_("%s: failure while writing changes to %s\n"), Prog, sub_gid_dbname());
-			SYSLOG ((LOG_ERR, "failure while writing changes to %s", sub_gid_dbname ()));
+			SYSLOG(LOG_ERR, "failure while writing changes to %s", sub_gid_dbname());
 			fail_exit (E_SUB_GID_UPDATE, process_selinux);
 		}
 		if (sub_gid_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sub_gid_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sub_gid_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sub_gid_dbname());
 			/* continue */
 		}
 		sub_gid_locked = false;
@@ -489,21 +487,21 @@ static void fail_exit (int code, bool process_selinux)
 	if (pw_locked) {
 		if (pw_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, pw_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", pw_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", pw_dbname());
 			/* continue */
 		}
 	}
 	if (gr_locked) {
 		if (gr_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, gr_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", gr_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", gr_dbname());
 			/* continue */
 		}
 	}
 	if (spw_locked) {
 		if (spw_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, spw_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", spw_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", spw_dbname());
 			/* continue */
 		}
 	}
@@ -511,7 +509,7 @@ static void fail_exit (int code, bool process_selinux)
 	if (sgr_locked) {
 		if (sgr_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sgr_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sgr_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sgr_dbname());
 			/* continue */
 		}
 	}
@@ -520,14 +518,14 @@ static void fail_exit (int code, bool process_selinux)
 	if (sub_uid_locked) {
 		if (sub_uid_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sub_uid_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sub_uid_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sub_uid_dbname());
 			/* continue */
 		}
 	}
 	if (sub_gid_locked) {
 		if (sub_gid_unlock (process_selinux) == 0) {
 			eprintf(_("%s: failed to unlock %s\n"), Prog, sub_gid_dbname());
-			SYSLOG ((LOG_ERR, "failed to unlock %s", sub_gid_dbname ()));
+			SYSLOG(LOG_ERR, "failed to unlock %s", sub_gid_dbname());
 			/* continue */
 		}
 	}
@@ -661,7 +659,7 @@ static void update_user (bool process_selinux)
 	              "delete-user",
 	              user_name, user_id, SHADOW_AUDIT_SUCCESS);
 #endif				/* WITH_AUDIT */
-	SYSLOG ((LOG_INFO, "delete user '%s'\n", user_name));
+	SYSLOG(LOG_INFO, "delete user '%s'\n", user_name);
 }
 
 /*
@@ -752,7 +750,7 @@ static bool remove_mailbox (void)
 		} else {
 			eprintf(_("%s: warning: can't remove %s: %s\n"),
 			        Prog, mailfile, strerrno());
-			SYSLOG((LOG_ERR, "Cannot remove %s: %s", mailfile, strerrno()));
+			SYSLOG(LOG_ERR, "Cannot remove %s: %s", mailfile, strerrno());
 #ifdef WITH_AUDIT
 			audit_logger (AUDIT_DEL_USER, Prog,
 			              "delete-mail-file",
@@ -767,7 +765,7 @@ static bool remove_mailbox (void)
 		if (unlink (mailfile) != 0) {
 			eprintf(_("%s: warning: can't remove %s: %s\n"),
 			        Prog, mailfile, strerrno());
-			SYSLOG((LOG_ERR, "Cannot remove %s: %s", mailfile, strerrno()));
+			SYSLOG(LOG_ERR, "Cannot remove %s: %s", mailfile, strerrno());
 #ifdef WITH_AUDIT
 			audit_logger (AUDIT_DEL_USER, Prog,
 			              "delete-mail-file",
@@ -791,7 +789,7 @@ static bool remove_mailbox (void)
 	if (i == 0) {
 		eprintf(_("%s: %s not owned by %s, not removing\n"),
 		         Prog, mailfile, user_name);
-		SYSLOG((LOG_ERR, "%s not owned by %s, not removed", mailfile, strerrno()));
+		SYSLOG(LOG_ERR, "%s not owned by %s, not removed", mailfile, strerrno());
 #ifdef WITH_AUDIT
 		audit_logger (AUDIT_DEL_USER, Prog,
 		              "delete-mail-file",
@@ -805,7 +803,7 @@ static bool remove_mailbox (void)
 	}
 	if (unlink (mailfile) != 0) {
 		eprintf(_("%s: warning: can't remove %s: %s\n"), Prog, mailfile, strerrno());
-		SYSLOG((LOG_ERR, "Cannot remove %s: %s", mailfile, strerrno()));
+		SYSLOG(LOG_ERR, "Cannot remove %s: %s", mailfile, strerrno());
 #ifdef WITH_AUDIT
 		audit_logger (AUDIT_DEL_USER, Prog,
 		              "delete-mail-file",
@@ -990,7 +988,7 @@ int main (int argc, char **argv)
 
 	if (PAM_SUCCESS != retval) {
 		eprintf(_("%s: PAM: %s\n"), Prog, pam_strerror(pamh, retval));
-		SYSLOG((LOG_ERR, "%s", pam_strerror (pamh, retval)));
+		SYSLOG(LOG_ERR, "%s", pam_strerror(pamh, retval));
 		if (NULL != pamh) {
 			(void) pam_end (pamh, retval);
 		}
