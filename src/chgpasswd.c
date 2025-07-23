@@ -25,6 +25,7 @@
 #endif				/* ACCT_TOOLS_SETUID */
 #include "atoi/str2i.h"
 #include "defines.h"
+#include "io/fprintf/eprinte.h"
 #include "io/fprintf/eprintf.h"
 #include "nscd.h"
 #include "sssd.h"
@@ -38,7 +39,6 @@
 #include "shadow/gshadow/sgrp.h"
 #include "shadowlog.h"
 #include "string/strcmp/streq.h"
-#include "string/strerrno.h"
 #include "string/strtok/stpsep.h"
 
 /*
@@ -520,8 +520,8 @@ int main (int argc, char **argv)
 			salt = crypt_make_salt (crypt_method, arg);
 			cp = pw_encrypt (newpwd, salt);
 			if (NULL == cp) {
-				eprintf(_("%s: failed to crypt password with salt '%s': %s\n"),
-				        Prog, salt, strerrno());
+				eprinte(_("%s: failed to crypt password with salt '%s'"),
+				        Prog, salt);
 				fail_exit (1, process_selinux);
 			}
 		}
