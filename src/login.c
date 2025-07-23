@@ -35,6 +35,7 @@
 #include "faillog.h"
 #include "failure.h"
 #include "getdef.h"
+#include "io/fprintf/eprinte.h"
 #include "io/fprintf/eprintf.h"
 #include "prototypes.h"
 #include "pwauth.h"
@@ -1079,7 +1080,7 @@ int main (int argc, char **argv)
 	child = fork ();
 	if (child < 0) {
 		/* error in fork() */
-		eprintf(_("%s: failure forking: %s"), Prog, strerrno());
+		eprinte(_("%s: failure forking"), Prog);
 		PAM_END;
 		exit (0);
 	} else if (child != 0) {

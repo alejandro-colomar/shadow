@@ -25,6 +25,7 @@
 #include "chkname.h"
 #include "defines.h"
 #include "getdef.h"
+#include "io/fprintf/eprinte.h"
 #include "io/fprintf/eprintf.h"
 #include "nscd.h"
 #include "prototypes.h"
@@ -214,8 +215,8 @@ static int new_password (const struct passwd *pw)
 
 		if (NULL == cipher) {
 			erase_pass (clear);
-			eprintf(_("%s: failed to crypt password with previous salt: %s\n"),
-			         Prog, strerrno());
+			eprinte(_("%s: failed to crypt password with previous salt"),
+			        Prog);
 			SYSLOG(LOG_INFO,
 			       "Failed to crypt password with previous salt of user '%s'",
 			       pw->pw_name);
@@ -365,8 +366,8 @@ static int new_password (const struct passwd *pw)
 	MEMZERO(pass);
 
 	if (NULL == cp) {
-		eprintf(_("%s: failed to crypt password with salt '%s': %s\n"),
-		         Prog, salt, strerrno());
+		eprinte(_("%s: failed to crypt password with salt '%s'"),
+		        Prog, salt);
 		return -1;
 	}
 

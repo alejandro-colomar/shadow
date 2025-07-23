@@ -24,6 +24,7 @@
 #include "atoi/a2i/a2s.h"
 #include "defines.h"
 #include "fields.h"
+#include "io/fprintf/eprinte.h"
 #include "io/fprintf/eprintf.h"
 #include "prototypes.h"
 #include "pwio.h"
@@ -765,8 +766,7 @@ int main (int argc, char **argv)
 	/* Drop privileges */
 	if (lflg && (   (setregid (rgid, rgid) != 0)
 	             || (setreuid (ruid, ruid) != 0))) {
-		eprintf(_("%s: failed to drop privileges (%s)\n"),
-		         Prog, strerrno());
+		eprinte(_("%s: failed to drop privileges"), Prog);
 		fail_exit (E_NOPERM, process_selinux);
 	}
 

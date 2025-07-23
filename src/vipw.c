@@ -30,6 +30,7 @@
 #include "defines.h"
 #include "getdef.h"
 #include "groupio.h"
+#include "io/fprintf/eprinte.h"
 #include "io/fprintf/eprintf.h"
 #include "nscd.h"
 #include "prototypes.h"
@@ -47,7 +48,6 @@
 #include "string/sprintf/aprintf.h"
 #include "string/sprintf/snprintf.h"
 #include "string/strcmp/streq.h"
-#include "string/strerrno.h"
 
 
 #define MSG_WARN_EDIT_OTHER_FILE _( \
@@ -312,7 +312,7 @@ vipwedit (const char *file, int (*file_lock) (void), int (*file_unlock) (bool))
 
 		status = system (buf);
 		if (-1 == status) {
-			eprintf(_("%s: %s: %s\n"), Prog, editor, strerrno());
+			eprinte(_("%s: %s"), Prog, editor);
 			exit (1);
 		} else if (   WIFEXITED (status)
 		           && (WEXITSTATUS (status) != 0)) {
@@ -350,20 +350,17 @@ vipwedit (const char *file, int (*file_lock) (void), int (*file_unlock) (bool))
 			if (orig_pgrp != -1) {
 				editor_pgrp = tcgetpgrp(STDIN_FILENO);
 				if (editor_pgrp == -1) {
-					eprintf("%s: %s: %s", Prog,
-						"tcgetpgrp", strerrno());
+					eprinte("%s: %s", Prog, "tcgetpgrp");
 				}
 				if (tcsetpgrp(STDIN_FILENO, orig_pgrp) == -1) {
-					eprintf("%s: %s: %s", Prog,
-						"tcsetpgrp", strerrno());
+					eprinte("%s: %s", Prog, "tcsetpgrp");
 				}
 			}
 			kill (getpid (), SIGSTOP);
 			/* wake child when resumed */
 			if (editor_pgrp != -1) {
 				if (tcsetpgrp(STDIN_FILENO, editor_pgrp) == -1) {
-					eprintf("%s: %s: %s", Prog,
-						"tcsetpgrp", strerrno());
+					eprinte("%s: %s", Prog, "tcsetpgrp");
 				}
 			}
 			killpg (pid, SIGCONT);
@@ -375,7 +372,7 @@ vipwedit (const char *file, int (*file_lock) (void), int (*file_unlock) (bool))
 	if (orig_pgrp != -1) {
 		 /* Restore terminal pgrp after editing. */
 		if (tcsetpgrp(STDIN_FILENO, orig_pgrp) == -1) {
-			eprintf("%s: %s: %s", Prog, "tcsetpgrp", strerrno());
+			eprinte("%s: %s", Prog, "tcsetpgrp");
 		}
 		sigprocmask(SIG_SETMASK, &omask, NULL);
 	}
@@ -445,8 +442,8 @@ vipwedit (const char *file, int (*file_lock) (void), int (*file_unlock) (bool))
 	unlink (filebackup);
 	link (file, filebackup);
 	if (rename (to_rename, file) == -1) {
-		eprintf(_("%s: can't restore %s: %s (your changes are in %s)\n"),
-		        Prog, file, strerrno(), to_rename);
+		eprinte(_("%s: can't restore %s (your changes are in %s)"),
+		        Prog, file, to_rename);
 #ifdef WITH_TCB
 		if (tcb_mode) {
 			free(to_rename);
