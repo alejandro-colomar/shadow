@@ -113,7 +113,7 @@ error_acl(struct error_context *, const char *fmt, ...)
 	}
 
 	va_start (ap, fmt);
-	(void) fprintf (shadow_logfd, _("%s: "), log_get_progname());
+	fprintf(shadow_logfd, "%s: ", log_get_progname());
 	vfprinte(shadow_logfd, fmt, ap);
 	va_end (ap);
 }
