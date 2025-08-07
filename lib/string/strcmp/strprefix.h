@@ -14,33 +14,35 @@
 #include "attr.h"
 #include "cast.h"
 
+#include <Optional.h>
+
 
 // string prefix
 #define strprefix(s, prefix)                                          \
 ({                                                                    \
-	const char  *p_;                                              \
+	_Optional const char  *p_;                                    \
 	                                                              \
 	p_ = strprefix_(s, prefix);                                   \
 	                                                              \
 	_Generic(s,                                                   \
-		const char *:                     p_,                 \
-		const void *:                     p_,                 \
-		char *:        const_cast(char *, p_),                \
-		void *:        const_cast(char *, p_)                 \
+		const char *:                               p_,       \
+		const void *:                               p_,       \
+		char *:        const_cast(_Optional char *, p_),      \
+		void *:        const_cast(_Optional char *, p_)       \
 	);                                                            \
 })
 
 
 ATTR_STRING(1)
 ATTR_STRING(2)
-inline const char *strprefix_(const char *s, const char *prefix);
+inline _Optional const char *strprefix_(const char *s, const char *prefix);
 
 
 /*
  * Return NULL if s does not start with prefix.
  * Return `s + strlen(prefix)` if s starts with prefix.
  */
-inline const char *
+inline _Optional const char *
 strprefix_(const char *s, const char *prefix)
 {
 	if (strncmp(s, prefix, strlen(prefix)) != 0)
