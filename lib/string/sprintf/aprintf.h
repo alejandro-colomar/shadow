@@ -18,19 +18,19 @@
 
 ATTR_MALLOC(free)
 format_attr(printf, 1, 2)
-inline char *aprintf(const char *restrict fmt, ...);
+inline _Optional char *aprintf(const char *restrict fmt, ...);
 
 ATTR_MALLOC(free)
 format_attr(printf, 1, 0)
-inline char *vaprintf(const char *restrict fmt, va_list ap);
+inline _Optional char *vaprintf(const char *restrict fmt, va_list ap);
 
 
 // allocate print formatted
 // Like asprintf(3), but simpler; omit the length.
-inline char *
+inline _Optional char *
 aprintf(const char *restrict fmt, ...)
 {
-	char     *p;
+	_Optional char     *p;
 	va_list  ap;
 
 	va_start(ap, fmt);
@@ -42,7 +42,7 @@ aprintf(const char *restrict fmt, ...)
 
 
 // Like vasprintf(3), but simpler; omit the length.
-inline char *
+inline _Optional char *
 vaprintf(const char *restrict fmt, va_list ap)
 {
 	char  *p;

@@ -15,16 +15,16 @@
 
 #define MALLOC(n, type)                                                       \
 (                                                                             \
-	(type *) mallocarray(n, sizeof(type))                                 \
+	(_Optional typeof(type) *) mallocarray(n, sizeof(type))                       \
 )
 
 
 ATTR_ALLOC_SIZE(1, 2)
 ATTR_MALLOC(free)
-inline void *mallocarray(size_t nmemb, size_t size);
+inline _Optional void *mallocarray(size_t nmemb, size_t size);
 
 
-inline void *
+inline _Optional void *
 mallocarray(size_t nmemb, size_t size)
 {
 	return reallocarray(NULL, nmemb, size);

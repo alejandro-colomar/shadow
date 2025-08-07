@@ -16,19 +16,21 @@
 
 #define REALLOCF(p, n, type)                                                  \
 (                                                                             \
-	_Generic(p, type *: (type *) reallocarrayf(p, (n) ?: 1, sizeof(type)))\
+	_Generic(p, _Optional typeof(type) *:                                 \
+		(_Optional typeof(type) *) reallocarrayf(p, (n) ?: 1, sizeof(type)) \
+	)                                                                     \
 )
 
 
 ATTR_ALLOC_SIZE(2, 3)
 ATTR_MALLOC(free)
-inline void *reallocarrayf(void *p, size_t nmemb, size_t size);
+inline _Optional void *reallocarrayf(_Optional void *p, size_t nmemb, size_t size);
 
 
-inline void *
-reallocarrayf(void *p, size_t nmemb, size_t size)
+inline _Optional void *
+reallocarrayf(_Optional void *p, size_t nmemb, size_t size)
 {
-	void  *q;
+	_Optional void  *q;
 
 	q = reallocarray(p, nmemb ?: 1, size ?: 1);
 

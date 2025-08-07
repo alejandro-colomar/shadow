@@ -23,13 +23,13 @@
 ATTR_ACCESS(read_write, 1) ATTR_ACCESS(write_only, 4, 3)
 ATTR_STRING(1) ATTR_STRING(2)
 inline ssize_t strsep2ls(char *s, const char *restrict delim,
-    size_t n, char *ls[restrict n]);
+    size_t n, _Optional char *ls[restrict n]);
 
 
 // string separate to list-of-strings
 // Like strsep2arr(), but add a NULL terminator.
 inline ssize_t
-strsep2ls(char *s, const char *restrict delim, size_t n, char *ls[restrict n])
+strsep2ls(char *s, const char *restrict delim, size_t n, _Optional char *ls[restrict n])
 {
 	size_t  i;
 

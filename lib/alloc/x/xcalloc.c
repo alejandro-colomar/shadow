@@ -21,13 +21,13 @@
 void *
 xcalloc(size_t nmemb, size_t size)
 {
-	void  *p;
+	_Optional void  *p;
 
 	p = calloc(nmemb, size);
 	if (p == NULL)
 		goto x;
 
-	return p;
+	return &*p;
 
 x:
 	fprintf(log_get_logfd(), _("%s: %s\n"),
