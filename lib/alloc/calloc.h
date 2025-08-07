@@ -13,7 +13,7 @@
 
 #define CALLOC(n, type)                                                       \
 (                                                                             \
-	(type *) calloc(n, sizeof(type))                                      \
+	(_Optional typeof(type) *) calloc(n, sizeof(type))                            \
 )
 
 

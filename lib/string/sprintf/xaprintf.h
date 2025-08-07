@@ -16,6 +16,8 @@
 #include "attr.h"
 #include "string/sprintf/aprintf.h"
 
+#include <Optional.h>
+
 
 ATTR_MALLOC(free)
 format_attr(printf, 1, 2)
@@ -44,7 +46,7 @@ xaprintf(const char *restrict fmt, ...)
 inline char *
 xvaprintf(const char *restrict fmt, va_list ap)
 {
-	char  *p;
+	_Optional char  *p;
 
 	p = vaprintf(fmt, ap);
 	if (p == NULL) {
@@ -52,7 +54,7 @@ xvaprintf(const char *restrict fmt, va_list ap)
 		exit(EXIT_FAILURE);
 	}
 
-	return p;
+	return &*p;
 }
 
 

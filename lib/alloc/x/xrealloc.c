@@ -18,15 +18,17 @@
 #include "defines.h"
 #include "shadowlog.h"
 
+#include <Optional.h>
+
 
 void *
-xreallocarray(void *p, size_t nmemb, size_t size)
+xreallocarray(_Optional void *p, size_t nmemb, size_t size)
 {
 	p = reallocarrayf(p, nmemb, size);
 	if (p == NULL)
 		goto x;
 
-	return p;
+	return &*p;
 
 x:
 	fprintf(log_get_logfd(), _("%s: %s\n"),
