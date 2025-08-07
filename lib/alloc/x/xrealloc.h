@@ -16,16 +16,21 @@
 
 #include "attr.h"
 
+#include <Optional.h>
+
 
 #define XREALLOC(ptr, n, type)                                                \
 (                                                                             \
-	_Generic(ptr, type *:  (type *) xreallocarray(ptr, n, sizeof(type)))  \
+	_Generic(ptr,                                                         \
+	_Optional typeof(type) *:  (type *) xreallocarray(ptr, n, sizeof(type)), \
+	typeof(type) *:  (type *) xreallocarray(ptr, n, sizeof(type))         \
+	)                                                                     \
 )
 
 
 ATTR_ALLOC_SIZE(2, 3)
 ATTR_MALLOC(free)
-void *xreallocarray(void *p, size_t nmemb, size_t size);
+void *xreallocarray(_Optional void *p, size_t nmemb, size_t size);
 
 
 #endif  // include guard

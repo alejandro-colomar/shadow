@@ -21,21 +21,21 @@
 
 ATTR_ACCESS(read_write, 1) ATTR_ACCESS(write_only, 3)
 ATTR_STRING(1) ATTR_STRING(2)
-inline char **xastrsep2ls(char *restrict s, const char *restrict delim,
-    size_t *restrict np);
+inline _Optional char **xastrsep2ls(char *restrict s, const char *restrict delim,
+    _Optional size_t *restrict np);
 
 
 // exit-on-error allocate string separate to list-of-strings
-inline char **
-xastrsep2ls(char *s, const char *restrict delim, size_t *restrict np)
+inline _Optional char **
+xastrsep2ls(char *s, const char *restrict delim, _Optional size_t *restrict np)
 {
-	char     **ls;
+	_Optional char *_Optional  *ls;
 
 	ls = astrsep2ls(s, delim, np);
 	if (ls == NULL)
 		goto x;
 
-	return ls;
+	return &*ls;
 x:
 	fprintf(log_get_logfd(), "%s: %s\n",
 	        log_get_progname(), strerror(errno));
