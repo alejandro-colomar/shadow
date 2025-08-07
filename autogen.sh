@@ -2,6 +2,7 @@
 
 autoreconf -v -f --install "$(dirname "$0")" || exit 1
 
+CC="/home/alx/src/llvm/llvm/opt/build/bin/clang"
 CFLAGS="-O2"
 CFLAGS="$CFLAGS -Wall"
 CFLAGS="$CFLAGS -Wformat=2"
@@ -147,6 +148,7 @@ CFLAGS="$CFLAGS -Wno-unknown-attributes"
 CFLAGS="$CFLAGS -Wno-unknown-warning-option"
 
 "$(dirname "$0")"/configure \
+	CC="$CC" \
 	CFLAGS="$CFLAGS" \
 	--enable-lastlog \
 	--disable-logind \
