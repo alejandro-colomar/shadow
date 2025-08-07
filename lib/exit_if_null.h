@@ -32,11 +32,11 @@
 })
 
 
-inline void exit_if_null_(void *p);
+inline void exit_if_null_(_Optional void *p);
 
 
 inline void
-exit_if_null_(void *p)
+exit_if_null_(_Optional void *p)
 {
 	if (p == NULL) {
 		fprintf(log_get_logfd(), "%s: %s\n", log_get_progname(), strerrno());

@@ -14,12 +14,14 @@
 
 #include "attr.h"
 
+#include <Optional.h>
+
 
 #if !defined(HAVE_STPEPRINTF)
 format_attr(printf, 3, 4)
-inline char *stpeprintf(char *dst, char *end, const char *restrict fmt, ...);
+inline _Optional char *stpeprintf(_Optional char *dst, char *end, const char *restrict fmt, ...);
 format_attr(printf, 3, 0)
-inline char *vstpeprintf(char *dst, char *end, const char *restrict fmt,
+inline _Optional char *vstpeprintf(_Optional char *dst, char *end, const char *restrict fmt,
     va_list ap);
 #endif
 
@@ -75,10 +77,10 @@ inline char *vstpeprintf(char *dst, char *end, const char *restrict fmt,
 
 
 #if !defined(HAVE_STPEPRINTF)
-inline char *
-stpeprintf(char *dst, char *end, const char *restrict fmt, ...)
+inline _Optional char *
+stpeprintf(_Optional char *dst, char *end, const char *restrict fmt, ...)
 {
-	char     *p;
+	_Optional char  *p;
 	va_list  ap;
 
 	va_start(ap, fmt);

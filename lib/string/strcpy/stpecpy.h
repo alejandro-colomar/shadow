@@ -14,10 +14,12 @@
 
 #include "attr.h"
 
+#include <Optional.h>
+
 
 #if !defined(HAVE_STPECPY)
 ATTR_STRING(3)
-inline char *stpecpy(char *dst, char *end, const char *restrict src);
+inline _Optional char *stpecpy(_Optional char *dst, char *end, const char *restrict src);
 #endif
 
 
@@ -64,8 +66,8 @@ inline char *stpecpy(char *dst, char *end, const char *restrict src);
 
 
 #if !defined(HAVE_STPECPY)
-inline char *
-stpecpy(char *dst, char *end, const char *restrict src)
+inline _Optional char *
+stpecpy(_Optional char *dst, char *end, const char *restrict src)
 {
 	bool    trunc;
 	size_t  dsize, dlen, slen;
@@ -75,12 +77,12 @@ stpecpy(char *dst, char *end, const char *restrict src)
 	if (dst == NULL)
 		return NULL;
 
-	dsize = end - dst;
+	dsize = end - &*dst;
 	slen = strnlen(src, dsize);
 	trunc = (slen == dsize);
 	dlen = slen - trunc;
 
-	return stpcpy(mempcpy(dst, src, dlen), "") + trunc;
+	return stpcpy(mempcpy(&*dst, src, dlen), "") + trunc;
 }
 #endif
 

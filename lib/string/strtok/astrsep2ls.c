@@ -9,5 +9,5 @@
 #include <stddef.h>
 
 
-extern inline char **astrsep2ls(char *restrict s, const char *restrict delim,
-    size_t *restrict np);
+extern inline _Optional char *_Optional *astrsep2ls(char *restrict s, const char *restrict delim,
+    _Optional size_t *restrict np);
