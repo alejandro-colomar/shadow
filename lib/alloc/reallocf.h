@@ -14,13 +14,15 @@
 #include "attr.h"
 #include "sizeof.h"
 
+#include <Optional.h>
+
 
 // reallocf_T - realloc free-on-error type-safe
 #define reallocf_T(p, n, T)   reallocf_T_(p, n, typeas(T))
 #define reallocf_T_(p, n, T)                                          \
 ({                                                                    \
-	_Generic(p, T *: (void)0);                                    \
-	(T *){reallocarrayf_(p, n, sizeof(T))};                       \
+	_Generic(p, T *: (void)0, _Optional T *: (void)0);            \
+	(_Optional T *){reallocarrayf_(p, n, sizeof(T))};             \
 })
 
 #define reallocarrayf_(p, n, size)  reallocarrayf(p, (n) ?: 1, (size) ?: 1)
@@ -29,13 +31,13 @@
 // reallocarrayf - realloc array free-on-error
 ATTR_ALLOC_SIZE(2, 3)
 ATTR_MALLOC(free)
-inline void *reallocarrayf(void *p, size_t nmemb, size_t size);
+inline _Optional void *reallocarrayf(_Optional void *p, size_t nmemb, size_t size);
 
 
-inline void *
-reallocarrayf(void *p, size_t nmemb, size_t size)
+inline _Optional void *
+reallocarrayf(_Optional void *p, size_t nmemb, size_t size)
 {
-	void  *q;
+	_Optional void  *q;
 
 	q = reallocarray(p, nmemb ?: 1, size ?: 1);
 
