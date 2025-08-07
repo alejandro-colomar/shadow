@@ -14,12 +14,14 @@
 #include "exit_if_null.h"
 #include "sizeof.h"
 
+#include <Optional.h>
+
 
 // malloc_T - malloc type-safe
 #define malloc_T(n, T)   malloc_T_(n, typeas(T))
 #define malloc_T_(n, T)                                               \
 ({                                                                    \
-	(T *){mallocarray(n, sizeof(T))};                             \
+	(_Optional T *){mallocarray(n, sizeof(T))};                   \
 })
 
 
@@ -30,10 +32,10 @@
 // mallocarray - malloc array
 ATTR_ALLOC_SIZE(1, 2)
 ATTR_MALLOC(free)
-inline void *mallocarray(size_t nmemb, size_t size);
+inline _Optional void *mallocarray(size_t nmemb, size_t size);
 
 
-inline void *
+inline _Optional void *
 mallocarray(size_t nmemb, size_t size)
 {
 	return reallocarray(NULL, nmemb, size);

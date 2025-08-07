@@ -8,6 +8,6 @@
 
 
 #if !defined(HAVE_STPECPY)
-extern inline char *stpecpy(char *dst, const char end[0],
+extern inline _Optional char *stpecpy(_Optional char *dst, const char end[0],
     const char *restrict src);
 #endif
