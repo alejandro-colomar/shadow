@@ -11,4 +11,4 @@
 
 
 extern inline ssize_t strsep2ls(char *s, const char *restrict delim,
-    size_t n, char *ls[restrict n]);
+    size_t n, _Optional char *ls[restrict n]);
