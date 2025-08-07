@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "atoi/getnum.h"
+#include "attr.h"
 #include "prototypes.h"
 #include "shadowlog.h"
 #include "stdlib.h"
@@ -15,13 +16,8 @@
 static const char Prog[] = "get_subid_owners";
 
 
-static void usage(void)
-{
-	fprintf(stderr, "Usage: [-g] %s subuid\n", Prog);
-	fprintf(stderr, "    list uids who own the given subuid\n");
-	fprintf(stderr, "    pass -g to query a subgid\n");
-	exit(EXIT_FAILURE);
-}
+NORETURN static void usage(void);
+
 
 int main(int argc, char *argv[])
 {
@@ -52,4 +48,14 @@ int main(int argc, char *argv[])
 	}
 	free(uids);
 	return 0;
+}
+
+
+static void
+usage(void)
+{
+	fprintf(stderr, "Usage: [-g] %s subuid\n", Prog);
+	fprintf(stderr, "    list uids who own the given subuid\n");
+	fprintf(stderr, "    pass -g to query a subgid\n");
+	exit(EXIT_FAILURE);
 }
