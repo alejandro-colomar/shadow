@@ -16,24 +16,26 @@
 #include "attr.h"
 #include "string/strcpy/strtcpy.h"
 
+#include <Optional.h>
+
 
 #if !defined(HAVE_STPECPY)
 // stpecpy - string offset-pointer end-pointer copy
 ATTR_STRING(3)
-inline char *stpecpy(char *dst, const char *end, const char *restrict src);
+inline _Optional char *stpecpy(_Optional char *dst, const char *end, const char *restrict src);
 #endif
 
 
 #if !defined(HAVE_STPECPY)
-inline char *
-stpecpy(char *dst, const char *end, const char *restrict src)
+inline _Optional char *
+stpecpy(_Optional char *dst, const char *end, const char *restrict src)
 {
 	ssize_t  dlen;
 
 	if (dst == NULL)
 		return NULL;
 
-	dlen = strtcpy(dst, src, end - dst);
+	dlen = strtcpy(&*dst, src, end - dst);
 	if (dlen == -1)
 		return NULL;
 

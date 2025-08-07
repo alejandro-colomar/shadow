@@ -18,7 +18,7 @@
 #define calloc_T(n, T)   calloc_T_(n, typeas(T))
 #define calloc_T_(n, T)                                               \
 ({                                                                    \
-	(T *){calloc(n, sizeof(T))};                                  \
+	(_Optional T *){calloc(n, sizeof(T))};                        \
 })
 
 

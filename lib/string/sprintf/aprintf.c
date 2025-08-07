@@ -9,5 +9,5 @@
 #include <stdarg.h>
 
 
-extern inline char *aprintf(const char *restrict fmt, ...);
-extern inline char *vaprintf(const char *restrict fmt, va_list ap);
+extern inline _Optional char *aprintf(const char *restrict fmt, ...);
+extern inline _Optional char *vaprintf(const char *restrict fmt, va_list ap);

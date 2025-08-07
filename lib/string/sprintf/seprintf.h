@@ -18,18 +18,18 @@
 #if !defined(HAVE_SEPRINTF)
 // seprintf - string end-pointer print formatted
 format_attr(printf, 3, 4)
-inline char *seprintf(char *dst, const char *end, const char *restrict fmt,
+inline _Optional char *seprintf(_Optional char *dst, const char *end, const char *restrict fmt,
     ...);
 // vseprintf - va_list string end-pointer print formatted
 format_attr(printf, 3, 0)
-inline char *vseprintf(char *dst, const char *end, const char *restrict fmt,
+inline _Optional char *vseprintf(_Optional char *dst, const char *end, const char *restrict fmt,
     va_list ap);
 #endif
 
 
 #if !defined(HAVE_SEPRINTF)
-inline char *
-seprintf(char *dst, const char *end, const char *restrict fmt, ...)
+inline _Optional char *
+seprintf(_Optional char *dst, const char *end, const char *restrict fmt, ...)
 {
 	char     *p;
 	va_list  ap;
@@ -44,8 +44,8 @@ seprintf(char *dst, const char *end, const char *restrict fmt, ...)
 
 
 #if !defined(HAVE_SEPRINTF)
-inline char *
-vseprintf(char *dst, const char *end, const char *restrict fmt, va_list ap)
+inline _Optional char *
+vseprintf(_Optional char *dst, const char *end, const char *restrict fmt, va_list ap)
 {
 	int        len;
 	ptrdiff_t  size;
@@ -53,8 +53,8 @@ vseprintf(char *dst, const char *end, const char *restrict fmt, va_list ap)
 	if (dst == NULL)
 		return NULL;
 
-	size = end - dst;
-	len = vstprintf(dst, size, fmt, ap);
+	size = end - &*dst;
+	len = vstprintf(&*dst, size, fmt, ap);
 	if (len == -1)
 		return NULL;
 
