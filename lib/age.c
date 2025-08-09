@@ -34,7 +34,7 @@
  *	expire() calls /bin/passwd to change the user's password
  *	if it has expired.
  */
-int expire (const struct passwd *pw, /*@null@*/const struct spwd *sp)
+int expire (const struct passwd *pw, _Optional const struct spwd *sp)
 {
 	int status;
 	pid_t child;
@@ -141,7 +141,7 @@ int expire (const struct passwd *pw, /*@null@*/const struct spwd *sp)
  *	to expire and warns the user of the pending password expiration.
  */
 
-void agecheck (/*@null@*/const struct spwd *sp)
+void agecheck (_Optional const struct spwd *sp)
 {
 	long now = time(NULL) / DAY;
 	long remain;
