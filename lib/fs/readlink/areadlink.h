@@ -18,6 +18,8 @@
 #include "attr.h"
 #include "fs/readlink/readlinknul.h"
 
+#include <Optional.h>
+
 
 ATTR_STRING(1)
 inline char *areadlink(const char *link);
@@ -31,15 +33,15 @@ areadlink(const char *link)
 
 	while (true) {
 		int   len;
-		char  *buf;
+		_Optional char  *buf;
 
 		buf = malloc_T(size, char);
 		if (NULL == buf)
 			return NULL;
 
-		len = readlinknul(link, buf, size);
+		len = readlinknul(link, &*buf, size);
 		if (len != -1)
-			return buf;
+			return &*buf;
 
 		free(buf);
 		if (errno != E2BIG)

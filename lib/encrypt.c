@@ -20,7 +20,7 @@
 #include "string/strcmp/strprefix.h"
 
 
-/*@exposed@*//*@null@*/char *pw_encrypt (const char *clear, const char *salt)
+/*@exposed@*/ _Optional char *pw_encrypt (const char *clear, const char *salt)
 {
 	static char cipher[128];
 	char *cp;

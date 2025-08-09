@@ -10,4 +10,4 @@
 #include <sys/types.h>
 
 
-extern inline gid_t *agetgroups(size_t *ngids);
+extern inline _Optional gid_t *agetgroups(size_t *ngids);

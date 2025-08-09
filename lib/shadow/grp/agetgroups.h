@@ -19,16 +19,16 @@
 
 ATTR_ACCESS(write_only, 1)
 ATTR_MALLOC(free)
-inline gid_t *agetgroups(size_t *ngids);
+inline _Optional gid_t *agetgroups(size_t *ngids);
 
 
 // Like getgroups(3), but allocate the buffer.
 // *ngids is used to return the number of elements in the allocated array.
-inline gid_t *
+inline _Optional gid_t *
 agetgroups(size_t *ngids)
 {
 	int    n;
-	gid_t  *gids;
+	_Optional gid_t  *gids;
 
 	n = getgroups(0, NULL);
 	if (n == -1)
@@ -40,7 +40,7 @@ agetgroups(size_t *ngids)
 	if (gids == NULL)
 		return NULL;
 
-	n = getgroups(n, gids);
+	n = getgroups(n, &*gids);
 	if (n == -1) {
 		free(gids);
 		return NULL;

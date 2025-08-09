@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include <locale.h>
 
+#include <Optional.h>
+
 #define gettext_noop(String) (String)
 /* #define gettext_def(String) "#define String" */
 
