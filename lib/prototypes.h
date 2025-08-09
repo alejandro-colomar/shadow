@@ -111,7 +111,7 @@ extern int copy_tree (const char *src_root, const char *dst_root,
                       gid_t old_gid, gid_t new_gid);
 
 /* encrypt.c */
-extern /*@exposed@*//*@null@*/char *pw_encrypt (const char *, const char *);
+extern /*@exposed@*/ _Optional char *pw_encrypt (const char *, const char *);
 
 /* env.c */
 extern void addenv (const char *, /*@null@*/const char *);

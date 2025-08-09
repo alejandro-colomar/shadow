@@ -75,7 +75,8 @@ void initenv (void)
 
 void addenv (const char *string, /*@null@*/const char *value)
 {
-	char    *cp, *newstring;
+	_Optional char  *cp;
+	char            *newstring;
 	size_t  i, n;
 
 	if (NULL != value) {
