@@ -6,5 +6,7 @@
 
 #include "string/strcmp/strcaseprefix.h"
 
+#include <Optional.h>
+
 
 extern inline _Optional const char *strcaseprefix_(const char *s, const char *prefix);

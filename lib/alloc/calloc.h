@@ -10,6 +10,8 @@
 
 #include <stdlib.h>
 
+#include <Optional.h>
+
 
 #define CALLOC(n, type)                                                       \
 (                                                                             \

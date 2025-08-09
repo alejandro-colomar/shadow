@@ -12,6 +12,8 @@
 #include <stddef.h>
 #include <sys/types.h>
 
+#include <Optional.h>
+
 #include "attr.h"
 #include "sizeof.h"
 #include "string/strtok/strsep2arr.h"

@@ -12,5 +12,7 @@
 
 #include <stddef.h>
 
+#include <Optional.h>
+
 
 extern inline _Optional void *mallocarray(size_t nmemb, size_t size);

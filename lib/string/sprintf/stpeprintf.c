@@ -8,6 +8,8 @@
 
 #include <stdarg.h>
 
+#include <Optional.h>
+
 
 #if !defined(HAVE_STPEPRINTF)
 extern inline _Optional char *stpeprintf(_Optional char *dst, char *end, const char *restrict fmt,

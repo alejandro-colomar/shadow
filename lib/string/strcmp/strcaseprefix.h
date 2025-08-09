@@ -11,6 +11,8 @@
 #include <stddef.h>
 #include <string.h>
 
+#include <Optional.h>
+
 #include "attr.h"
 #include "cast.h"
 

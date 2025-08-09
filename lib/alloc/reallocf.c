@@ -12,5 +12,7 @@
 
 #include <stddef.h>
 
+#include <Optional.h>
+
 
 extern inline _Optional void *reallocarrayf(_Optional void *p, size_t nmemb, size_t size);

@@ -6,6 +6,8 @@
 
 #include "string/strcpy/stpecpy.h"
 
+#include <Optional.h>
+
 
 #if !defined(HAVE_STPECPY)
 extern inline _Optional char *stpecpy(_Optional char *dst, char *end, const char *restrict src);

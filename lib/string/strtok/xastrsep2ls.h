@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <Optional.h>
+
 #include "attr.h"
 #include "shadowlog.h"
 #include "string/strtok/astrsep2ls.h"

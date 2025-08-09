@@ -9,6 +9,8 @@
 #include <stddef.h>
 #include <sys/types.h>
 
+#include <Optional.h>
+
 
 extern inline ssize_t strsep2ls(char *s, const char *restrict delim,
     size_t n, _Optional char *ls[restrict n]);

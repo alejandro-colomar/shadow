@@ -10,6 +10,8 @@
 
 #include <stddef.h>
 
+#include <Optional.h>
+
 #include "alloc/malloc.h"
 #include "attr.h"
 #include "string/strchr/strchrscnt.h"

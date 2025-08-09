@@ -6,5 +6,7 @@
 
 #include "string/strcmp/strprefix.h"
 
+#include <Optional.h>
+
 
 extern inline _Optional const char *strprefix_(const char *s, const char *prefix);

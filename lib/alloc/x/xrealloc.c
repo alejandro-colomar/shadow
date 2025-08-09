@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <Optional.h>
+
 #include "alloc/reallocf.h"
 #include "defines.h"
 #include "shadowlog.h"
