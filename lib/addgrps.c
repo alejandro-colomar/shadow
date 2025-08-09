@@ -38,7 +38,7 @@ add_groups(const char *list)
 {
 	char    *dup;
 	FILE *shadow_logfd = log_get_logfd();
-	gid_t   *gids;
+	_Optional gid_t  *gids;
 	size_t  n;
 
 	gids = agetgroups(&n);
@@ -66,7 +66,7 @@ add_groups(const char *list)
 				continue;
 			}
 
-			LSEARCH(gid_t, &grp->gr_gid, gids, &n);
+			LSEARCH(gid_t, &grp->gr_gid, &*gids, &n);
 		}
 	}
 	free(dup);

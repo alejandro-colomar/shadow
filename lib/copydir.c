@@ -43,6 +43,8 @@
 #include "string/strcmp/strprefix.h"
 #include "string/strerrno.h"
 
+#include <Optional.h>
+
 
 static /*@null@*/const char *src_orig;
 static /*@null@*/const char *dst_orig;
@@ -310,8 +312,8 @@ static int copy_tree_impl (const struct path_info *src, const struct path_info *
 		set_orig = true;
 	}
 	while (0 == err && NULL != (ent = readdir(dir))) {
-		char              *src_name = NULL;
-		char              *dst_name;
+		_Optional char              *src_name = NULL;
+		_Optional char              *dst_name;
 		struct path_info  src_entry, dst_entry;
 		/*
 		 * Skip the "." and ".." entries
@@ -333,11 +335,11 @@ static int copy_tree_impl (const struct path_info *src, const struct path_info *
 			goto skip;
 		}
 
-		src_entry.full_path = src_name;
+		src_entry.full_path = &*src_name;
 		src_entry.dirfd = dirfd(dir);
 		src_entry.name = ent->d_name;
 
-		dst_entry.full_path = dst_name;
+		dst_entry.full_path = &*dst_name;
 		dst_entry.dirfd = dst_fd;
 		dst_entry.name = ent->d_name;
 
