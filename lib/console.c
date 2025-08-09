@@ -31,7 +31,7 @@
 static bool
 is_listed(const char *cfgin, const char *tty, bool def)
 {
-	FILE *fp;
+	_Optional FILE  *fp;
 	char buf[1024], *s;
 	const char *cons;
 
@@ -77,10 +77,10 @@ is_listed(const char *cfgin, const char *tty, bool def)
 	 * See if this tty is listed in the console file.
 	 */
 
-	while (fgets_a(buf, fp) != NULL) {
+	while (fgets_a(buf, &*fp) != NULL) {
 		stpsep(buf, "\n");
 		if (streq(buf, tty)) {
-			(void) fclose (fp);
+			(void) fclose (&*fp);
 			return true;
 		}
 	}
@@ -89,7 +89,7 @@ is_listed(const char *cfgin, const char *tty, bool def)
 	 * This tty isn't a console.
 	 */
 
-	(void) fclose (fp);
+	(void) fclose (&*fp);
 	return false;
 }
 

@@ -19,7 +19,7 @@
  */
 #define CLEANUP_FUNCTIONS 10
 
-typedef /*@null@*/void * parg_t;
+typedef _Optional void * parg_t;
 
 static cleanup_function cleanup_functions[CLEANUP_FUNCTIONS];
 static parg_t cleanup_function_args[CLEANUP_FUNCTIONS];
@@ -66,7 +66,7 @@ void do_cleanups (void)
 /*
  * add_cleanup - Add a cleanup_function to the cleanup_functions stack.
  */
-void add_cleanup (/*@notnull@*/cleanup_function pcf, /*@null@*/void *arg)
+void add_cleanup (/*@notnull@*/cleanup_function pcf, _Optional void *arg)
 {
 	unsigned int i;
 	assert (NULL != pcf);

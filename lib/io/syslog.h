@@ -78,12 +78,12 @@
 // system log C-locale
 #define SYSLOG_C(...)  do                                             \
 {                                                                     \
-	char  *l_;                                                    \
+	_Optional char  *l_;                                          \
 	                                                              \
 	l_ = setlocale(LC_ALL, NULL);                                 \
 	                                                              \
 	if (NULL != l_)                                               \
-		l_ = strdup(l_);                                      \
+		l_ = strdup(&*l_);                                    \
 	                                                              \
 	if (NULL != l_)                                               \
 		setlocale(LC_ALL, "C");                               \
