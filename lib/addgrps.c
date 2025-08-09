@@ -37,7 +37,7 @@ int
 add_groups(const char *list)
 {
 	char    *dup;
-	gid_t   *gids;
+	_Optional gid_t   *gids;
 	size_t  n;
 
 	gids = agetgroups(&n);
@@ -70,7 +70,7 @@ add_groups(const char *list)
 	}
 	free(dup);
 
-	if (setgroups(n, gids) == -1) {
+	if (setgroups(n, &*gids) == -1) {
 		fprintf(log_get_logfd(), "setgroups: %s\n", strerrno());
 		goto free_gids;
 	}

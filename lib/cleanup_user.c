@@ -92,7 +92,8 @@ void cleanup_report_add_user_shadow (void *user_name)
  *
  * It should be registered after the passwd database is successfully locked.
  */
-void cleanup_unlock_passwd (void *process_selinux)
+void
+cleanup_unlock_passwd(_Optional void *process_selinux)
 {
 	bool process = *((bool *) process_selinux);
 

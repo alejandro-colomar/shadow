@@ -169,7 +169,8 @@ void cleanup_report_del_group_gshadow (void *group_name)
  *
  * It should be registered after the group file is successfully locked.
  */
-void cleanup_unlock_group (void *process_selinux)
+void
+cleanup_unlock_group(_Optional void *process_selinux)
 {
 	bool process = *((bool *) process_selinux);
 
@@ -191,7 +192,8 @@ void cleanup_unlock_group (void *process_selinux)
  *
  * It should be registered after the gshadow file is successfully locked.
  */
-void cleanup_unlock_gshadow (void *process_selinux)
+void
+cleanup_unlock_gshadow(_Optional void *process_selinux)
 {
 	bool process = *((bool *) process_selinux);
 

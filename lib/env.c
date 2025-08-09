@@ -74,7 +74,8 @@ void initenv (void)
 
 void addenv (const char *string, /*@null@*/const char *value)
 {
-	char    *cp, *newstring;
+	_Optional char  *cp;
+	char            *newstring;
 	size_t  i, n;
 
 	if (NULL != value) {
@@ -160,7 +161,7 @@ void set_env (int argc, char *const *argv)
 {
 	int   noname = 1;
 	char  variable[1024];
-	char  *cp;
+	_Optional char  *cp;
 
 	for (; argc > 0; argc--, argv++) {
 		if (strlen(*argv) >= sizeof(variable)) {

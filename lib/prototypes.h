@@ -43,11 +43,11 @@ extern int add_groups (const char *);
 #endif
 
 /* age.c */
-extern void agecheck (/*@null@*/const struct spwd *);
-extern int expire (const struct passwd *, /*@null@*/const struct spwd *);
+extern void agecheck (_Optional const struct spwd *);
+extern int expire (const struct passwd *, _Optional const struct spwd *);
 
 /* isexpired.c */
-extern int isexpired (const struct passwd *, /*@null@*/const struct spwd *);
+extern int isexpired (const struct passwd *, _Optional const struct spwd *);
 
 /* basename() renamed to Basename() to avoid libc name space confusion */
 /* basename.c */
@@ -62,8 +62,8 @@ extern int chown_tree (const char *root,
 extern void chown_tty (const struct passwd *);
 
 /* cleanup.c */
-typedef /*@null@*/void (*cleanup_function) (/*@null@*/void *arg);
-void add_cleanup (/*@notnull@*/cleanup_function pcf, /*@null@*/void *arg);
+typedef /*@null@*/void (*cleanup_function) (_Optional void *arg);
+void add_cleanup (/*@notnull@*/cleanup_function pcf, _Optional void *arg);
 void del_cleanup (/*@notnull@*/cleanup_function pcf);
 void do_cleanups (void);
 
@@ -86,11 +86,11 @@ void cleanup_report_del_group_gshadow (void *group_name);
 void cleanup_report_mod_passwd (void *cleanup_info);
 void cleanup_report_mod_group (void *cleanup_info);
 void cleanup_report_mod_gshadow (void *cleanup_info);
-void cleanup_unlock_group (void *process_selinux);
+void cleanup_unlock_group (_Optional void *process_selinux);
 #ifdef SHADOWGRP
-void cleanup_unlock_gshadow (void *process_selinux);
+void cleanup_unlock_gshadow (_Optional void *process_selinux);
 #endif
-void cleanup_unlock_passwd (void *process_selinux);
+void cleanup_unlock_passwd (_Optional void *process_selinux);
 
 /* console.c */
 extern bool console (const char *);
@@ -102,10 +102,10 @@ extern int copy_tree (const char *src_root, const char *dst_root,
                       gid_t old_gid, gid_t new_gid);
 
 /* encrypt.c */
-extern /*@exposed@*//*@null@*/char *pw_encrypt (const char *, const char *);
+extern /*@exposed@*/ _Optional char *pw_encrypt (const char *, const char *);
 
 /* env.c */
-extern void addenv (const char *, /*@null@*/const char *);
+extern void addenv (const char *, _Optional const char *);
 extern void initenv (void);
 extern void set_env (int, char *const *);
 extern void sanitize_env (void);
@@ -116,12 +116,12 @@ extern void check_fds (void);
 /* find_new_gid.c */
 extern int find_new_gid (bool sys_group,
                          gid_t *gid,
-                         /*@null@*/gid_t const *preferred_gid);
+                         _Optional gid_t const *preferred_gid);
 
 /* find_new_uid.c */
 extern int find_new_uid (bool sys_user,
                          uid_t *uid,
-                         /*@null@*/uid_t const *preferred_uid);
+                         _Optional uid_t const *preferred_uid);
 
 #ifdef ENABLE_SUBIDS
 /* find_new_sub_gids.c */
@@ -132,7 +132,7 @@ extern int find_new_sub_uids(uid_t uid, id_t *range_start, unsigned long *range_
 #endif				/* ENABLE_SUBIDS */
 
 /* getgr_nam_gid.c */
-extern /*@only@*//*@null@*/struct group *getgr_nam_gid (/*@null@*/const char *grname);
+extern /*@only@*/_Optional struct group *getgr_nam_gid (_Optional const char *grname);
 
 /* get_pid.c */
 extern int get_pidfd_from_fd(const char *pidfdstr);
@@ -149,11 +149,11 @@ extern time_t gettime (void);
 /* groupio.c */
 extern void __gr_del_entry (const struct commonio_entry *ent);
 extern /*@observer@*/const struct commonio_db *__gr_get_db (void);
-extern /*@dependent@*/ /*@null@*/struct commonio_entry *__gr_get_head (void);
+extern /*@dependent@*/ _Optional struct commonio_entry *__gr_get_head (void);
 extern void __gr_set_changed (void);
 
 /* groupmem.c */
-extern /*@null@*/ /*@only@*/struct group *__gr_dup (const struct group *grent);
+extern _Optional  /*@only@*/struct group *__gr_dup (const struct group *grent);
 extern void gr_free_members (struct group *grent);
 extern void gr_free(/*@only@*/struct group *grent);
 
@@ -213,7 +213,7 @@ extern void mailcheck (void);
 extern int motd(void);
 
 /* myname.c */
-extern /*@null@*//*@only@*/struct passwd *get_my_pwent (void);
+extern _Optional /*@only@*/struct passwd *get_my_pwent (void);
 
 /* nss.c */
 #include <libsubid/subid.h>
@@ -336,10 +336,10 @@ extern void pwd_init (void);
 /* pwio.c */
 extern void __pw_del_entry (const struct commonio_entry *ent);
 extern struct commonio_db *__pw_get_db (void);
-extern /*@dependent@*/ /*@null@*/struct commonio_entry *__pw_get_head (void);
+extern /*@dependent@*/ _Optional struct commonio_entry *__pw_get_head (void);
 
 /* pwmem.c */
-extern /*@null@*/ /*@only@*/struct passwd *__pw_dup (const struct passwd *pwent);
+extern _Optional  /*@only@*/struct passwd *__pw_dup (const struct passwd *pwent);
 extern void pw_free(/*@only@*/struct passwd *pwent);
 
 /* csrand.c */
@@ -354,7 +354,7 @@ extern int remove_tree (const char *root, bool remove_root);
 extern void process_root_flag (const char* short_opt, int argc, char **argv);
 
 /* salt.c */
-extern /*@observer@*/const char *crypt_make_salt (/*@null@*//*@observer@*/const char *meth, /*@null@*/void *arg);
+extern /*@observer@*/const char *crypt_make_salt (_Optional /*@observer@*/const char *meth, _Optional void *arg);
 
 /* selinux.c */
 #ifdef WITH_SELINUX
@@ -387,26 +387,26 @@ extern void setup_env (struct passwd *);
 
 /* sgroupio.c */
 extern void __sgr_del_entry (const struct commonio_entry *ent);
-extern /*@null@*/ /*@only@*/struct sgrp *__sgr_dup (const struct sgrp *sgent);
+extern _Optional  /*@only@*/struct sgrp *__sgr_dup (const struct sgrp *sgent);
 extern void sgr_free(/*@only@*/struct sgrp *sgent);
-extern /*@dependent@*/ /*@null@*/struct commonio_entry *__sgr_get_head (void);
+extern /*@dependent@*/ _Optional struct commonio_entry *__sgr_get_head (void);
 extern void __sgr_set_changed (void);
 
 /* shadowio.c */
-extern /*@dependent@*/ /*@null@*/struct commonio_entry *__spw_get_head (void);
+extern /*@dependent@*/ _Optional struct commonio_entry *__spw_get_head (void);
 extern void __spw_del_entry (const struct commonio_entry *ent);
 
 /* shadowmem.c */
-extern /*@null@*/ /*@only@*/struct spwd *__spw_dup (const struct spwd *spent);
+extern _Optional  /*@only@*/struct spwd *__spw_dup (const struct spwd *spent);
 extern void spw_free(/*@only@*/struct spwd *spent);
 
 /* shell.c */
-extern int shell (const char *file, /*@null@*/const char *arg, char *const envp[]);
+extern int shell (const char *file, _Optional const char *arg, char *const envp[]);
 
 /* spawn.c */
 ATTR_ACCESS(write_only, 4)
 extern int run_command(const char *cmd, const char *argv[],
-                       /*@null@*/const char *envp[], int *restrict status);
+                       _Optional const char *envp[], int *restrict status);
 
 /* strtoday.c */
 extern long strtoday (const char *);
@@ -506,17 +506,17 @@ extern bool valid (const char *, const struct passwd *);
 extern int write_full(int fd, const void *buf, size_t count);
 
 /* xgetpwnam.c */
-extern /*@null@*/ /*@only@*/struct passwd *xgetpwnam (const char *);
+extern _Optional  /*@only@*/struct passwd *xgetpwnam (const char *);
 /* xprefix_getpwnam.c */
-extern /*@null@*/ /*@only@*/struct passwd *xprefix_getpwnam (const char *);
+extern _Optional  /*@only@*/struct passwd *xprefix_getpwnam (const char *);
 /* xgetpwuid.c */
-extern /*@null@*/ /*@only@*/struct passwd *xgetpwuid (uid_t);
+extern _Optional  /*@only@*/struct passwd *xgetpwuid (uid_t);
 /* xgetgrnam.c */
-extern /*@null@*/ /*@only@*/struct group *xgetgrnam (const char *);
+extern _Optional  /*@only@*/struct group *xgetgrnam (const char *);
 /* xgetgrgid.c */
-extern /*@null@*/ /*@only@*/struct group *xgetgrgid (gid_t);
+extern _Optional  /*@only@*/struct group *xgetgrgid (gid_t);
 /* xgetspnam.c */
-extern /*@null@*/ /*@only@*/struct spwd *xgetspnam(const char *);
+extern _Optional  /*@only@*/struct spwd *xgetspnam(const char *);
 
 /* yesno.c */
 extern bool yes_or_no (bool read_only);

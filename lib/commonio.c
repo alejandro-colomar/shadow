@@ -47,7 +47,8 @@
 /* local function prototypes */
 static int check_link_count (const char *file, bool log);
 static int do_lock_file (const char *file, const char *lock, bool log);
-static /*@null@*/ /*@dependent@*/FILE *fmkstemp_set_perms (
+static /*@dependent@*/ _Optional FILE *
+fmkstemp_set_perms(
 	char *name,
 	const struct stat *sb);
 static int create_backup (const char *, FILE *);
@@ -213,28 +214,29 @@ static int do_lock_file (const char *file, const char *lock, bool log)
 }
 
 
-static /*@null@*/ /*@dependent@*/FILE *fmkstemp_set_perms (
+static /*@dependent@*/ _Optional FILE *
+fmkstemp_set_perms(
 	char *name,
 	const struct stat *sb)
 {
-	FILE *fp;
+	_Optional FILE *fp;
 
 	fp = fmkomstemp(name, 0, 0600);
 	if (NULL == fp) {
 		return NULL;
 	}
 
-	if (fchown (fileno (fp), sb->st_uid, sb->st_gid) != 0) {
+	if (fchown (fileno (&*fp), sb->st_uid, sb->st_gid) != 0) {
 		goto fail;
 	}
-	if (fchmod (fileno (fp), sb->st_mode & 0664) != 0) {
+	if (fchmod (fileno (&*fp), sb->st_mode & 0664) != 0) {
 		goto fail;
 	}
 
 	return fp;
 
       fail:
-	(void) fclose (fp);
+	(void) fclose (&*fp);
 	/* fmkstemp_set_perms is used for intermediate files */
 	(void) unlink (name);
 	return NULL;
@@ -246,7 +248,7 @@ static int create_backup (const char *name, FILE * fp)
 	char  tmpf[PATH_MAX], target[PATH_MAX];
 	struct stat sb;
 	struct utimbuf ub;
-	FILE *bkfp;
+	_Optional FILE  *bkfp;
 	int c;
 
 	stprintf_a(tmpf, "%s.cioXXXXXX", name);
@@ -263,22 +265,22 @@ static int create_backup (const char *name, FILE * fp)
 	c = 0;
 	if (fseek (fp, 0, SEEK_SET) == 0) {
 		while ((c = getc (fp)) != EOF) {
-			if (putc (c, bkfp) == EOF) {
+			if (putc (c, &*bkfp) == EOF) {
 				break;
 			}
 		}
 	}
 	if ((c != EOF) || (ferror (fp) != 0) || (fflush (bkfp) != 0)) {
-		(void) fclose (bkfp);
+		(void) fclose (&*bkfp);
 		unlink(tmpf);
 		return -1;
 	}
-	if (fsync (fileno (bkfp)) != 0) {
-		(void) fclose (bkfp);
+	if (fsync (fileno (&*bkfp)) != 0) {
+		(void) fclose (&*bkfp);
 		unlink(tmpf);
 		return -1;
 	}
-	if (fclose (bkfp) != 0) {
+	if (fclose (&*bkfp) != 0) {
 		unlink(tmpf);
 		return -1;
 	}
@@ -332,8 +334,8 @@ bool commonio_present (const struct commonio_db *db)
 int commonio_lock_nowait (struct commonio_db *db, bool log)
 {
 	int   err = 0;
-	char  *file = NULL;
-	char  *lock = NULL;
+	_Optional char  *file = NULL;
+	_Optional char  *lock = NULL;
 
 	if (db->locked) {
 		return 1;
@@ -347,7 +349,7 @@ int commonio_lock_nowait (struct commonio_db *db, bool log)
 	if (lock == NULL)
 		goto cleanup_ENOMEM;
 
-	if (do_lock_file (file, lock, log) != 0) {
+	if (do_lock_file (&*file, &*lock, log) != 0) {
 		db->locked = true;
 		lock_count++;
 		err = 1;
@@ -548,7 +550,7 @@ static void add_one_entry_nis (struct commonio_db *db,
 int
 commonio_open(struct commonio_db *db, int mode)
 {
-	char *buf;
+	_Optional char *buf;
 	char *line;
 	void *eptr = NULL;
 	int flags = mode;
@@ -612,12 +614,12 @@ commonio_open(struct commonio_db *db, int mode)
 	while (getline(&buf, &buflen, db->fp) != -1) {
 		struct commonio_entry  *p;
 
-		if (stpsep(buf, "\n") == NULL) {
+		if (stpsep(&*buf, "\n") == NULL) {
 			fprintf(log_get_logfd(), _("%s: Non-text file.\n"), db->filename);
 			goto cleanup_buf;
 		}
 
-		line = strdup (buf);
+		line = strdup (&*buf);
 		if (NULL == line) {
 			goto cleanup_buf;
 		}
@@ -643,7 +645,7 @@ commonio_open(struct commonio_db *db, int mode)
 		p->line = line;
 		p->changed = false;
 
-		add_one_entry (db, p);
+		add_one_entry (db, &*p);
 	}
 
 	free (buf);
@@ -683,7 +685,8 @@ commonio_open(struct commonio_db *db, int mode)
 int
 commonio_sort (struct commonio_db *db, int (*cmp) (const void *, const void *))
 {
-	struct commonio_entry **entries, *ptr;
+	struct commonio_entry *_Optional  *entries;
+	struct commonio_entry             *ptr;
 	size_t n = 0, i;
 #if KEEP_NIS_AT_END
 	struct commonio_entry *nis = NULL;
@@ -729,7 +732,7 @@ commonio_sort (struct commonio_db *db, int (*cmp) (const void *, const void *))
 		entries[n] = ptr;
 		n++;
 	}
-	qsort(entries, n, sizeof(struct commonio_entry *), cmp);
+	qsort(&*entries, n, sizeof(struct commonio_entry *), cmp);
 
 	/* Take care of the head and tail separately */
 	db->head = entries[0];
@@ -849,6 +852,7 @@ commonio_close(struct commonio_db *db, MAYBE_UNUSED bool process_selinux)
 	bool         errors = false;
 	char         tmpf[PATH_MAX];
 	struct stat  sb;
+	_Optional FILE  *fp;
 
 	if (!db->isopen) {
 		errno = EINVAL;
@@ -927,6 +931,8 @@ commonio_close(struct commonio_db *db, MAYBE_UNUSED bool process_selinux)
 		goto fail;
 	}
 
+	db->fp = &*fp;
+
 	if (write_all (db) != 0) {
 		errors = true;
 	}
@@ -1003,7 +1009,7 @@ static /*@dependent@*/ /*@null@*/struct commonio_entry *find_entry_by_name (
 
 int commonio_update (struct commonio_db *db, const void *eptr)
 {
-	struct commonio_entry *p;
+	_Optional struct commonio_entry  *p;
 	void *nentry;
 
 	if (!db->isopen || db->readonly) {
@@ -1025,7 +1031,7 @@ int commonio_update (struct commonio_db *db, const void *eptr)
 		db->ops->cio_free(p->eptr);
 		p->eptr = nentry;
 		p->changed = true;
-		db->cursor = p;
+		db->cursor = &*p;
 
 		db->changed = true;
 		return 1;
@@ -1043,9 +1049,9 @@ int commonio_update (struct commonio_db *db, const void *eptr)
 	p->changed = true;
 
 #if KEEP_NIS_AT_END
-	add_one_entry_nis (db, p);
+	add_one_entry_nis (db, &*p);
 #else				/* !KEEP_NIS_AT_END */
-	add_one_entry (db, p);
+	add_one_entry (db, &*p);
 #endif				/* !KEEP_NIS_AT_END */
 
 	db->changed = true;
@@ -1055,7 +1061,7 @@ int commonio_update (struct commonio_db *db, const void *eptr)
 #ifdef ENABLE_SUBIDS
 int commonio_append (struct commonio_db *db, const void *eptr)
 {
-	struct commonio_entry *p;
+	_Optional struct commonio_entry  *p;
 	void *nentry;
 
 	if (!db->isopen || db->readonly) {
@@ -1078,7 +1084,7 @@ int commonio_append (struct commonio_db *db, const void *eptr)
 	p->eptr = nentry;
 	p->line = NULL;
 	p->changed = true;
-	add_one_entry (db, p);
+	add_one_entry (db, &*p);
 
 	db->changed = true;
 	return 1;

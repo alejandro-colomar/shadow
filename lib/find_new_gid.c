@@ -24,6 +24,8 @@
 #include <assert.h>
 
 
+#include <Optional.h>
+
 /*
  * get_ranges - Get the minimum and maximum ID ranges for the search
  *
@@ -112,7 +114,7 @@ static int get_ranges (bool sys_group, gid_t *min_id, gid_t *max_id,
 static int check_gid (const gid_t gid,
 		      const gid_t gid_min,
 		      const gid_t gid_max,
-		      const bool *used_gids)
+		      _Optional const bool *used_gids)
 {
 	/* First test that the preferred ID is in the range */
 	if (gid < gid_min || gid > gid_max) {
@@ -161,7 +163,7 @@ int find_new_gid (bool sys_group,
                  gid_t *gid,
                  /*@null@*/gid_t const *preferred_gid)
 {
-	bool *used_gids;
+	_Optional bool  *used_gids;
 	const struct group *grp;
 	gid_t gid_min, gid_max, preferred_min;
 	gid_t id;
@@ -302,7 +304,7 @@ int find_new_gid (bool sys_group,
 
 		/* Search through all of the IDs in the range */
 		for (id = lowest_found; id >= gid_min; id--) {
-			result = check_gid (id, gid_min, gid_max, used_gids);
+			result = check_gid (id, gid_min, gid_max, &*used_gids);
 			if (result == 0) {
 				/* This GID is available. Return it. */
 				*gid = id;

@@ -92,10 +92,10 @@
  */
 
 
-static char *
+static _Optional char *
 agetpass_internal(const char *prompt, int flags)
 {
-	char    *pass;
+	_Optional char  *pass;
 	size_t  len;
 
 	/*
@@ -110,10 +110,10 @@ agetpass_internal(const char *prompt, int flags)
 	if (pass == NULL)
 		return NULL;
 
-	if (readpassphrase(prompt, pass, PASS_MAX + 2, flags) == NULL)
+	if (readpassphrase(prompt, &*pass, PASS_MAX + 2, flags) == NULL)
 		goto fail;
 
-	len = strlen(pass);
+	len = strlen(&*pass);
 	if (len == PASS_MAX + 1) {
 		errno = ENOBUFS;
 		goto fail;
@@ -126,13 +126,13 @@ fail:
 	return NULL;
 }
 
-char *
+_Optional char *
 agetpass(const char *prompt)
 {
 	return agetpass_internal(prompt, RPP_REQUIRE_TTY);
 }
 
-char *
+_Optional char *
 agetpass_stdin(void)
 {
 	return agetpass_internal("", RPP_STDIN);
