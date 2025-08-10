@@ -102,6 +102,8 @@ libshadow_la_SOURCES = \
 	find_new_sub_gids.c \
 	find_new_sub_uids.c \
 	fputsx.c \
+	fs/creat/fmcreat.c \
+	fs/creat/fmcreat.h \
 	fs/mkstemp/fmkomstemp.c \
 	fs/mkstemp/fmkomstemp.h \
 	fs/mkstemp/mkomstemp.c \
