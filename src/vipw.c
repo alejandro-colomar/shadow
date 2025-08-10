@@ -28,6 +28,7 @@
 #include <utime.h>
 
 #include "defines.h"
+#include "fs/creat/fmcreat.h"
 #include "getdef.h"
 #include "groupio.h"
 #include "nscd.h"
@@ -108,11 +109,8 @@ static int create_backup_file (FILE * fp, const char *backup, struct stat *sb)
 	struct utimbuf ub;
 	FILE *bkfp;
 	int c;
-	mode_t mask;
 
-	mask = umask (077);
-	bkfp = fopen (backup, "w");
-	(void) umask (mask);
+	bkfp = fmcreat(backup, sb->st_mode);
 	if (NULL == bkfp) {
 		return -1;
 	}
@@ -142,7 +140,6 @@ static int create_backup_file (FILE * fp, const char *backup, struct stat *sb)
 	ub.actime = sb->st_atime;
 	ub.modtime = sb->st_mtime;
 	if (   (utime (backup, &ub) != 0)
-	    || (chmod (backup, sb->st_mode) != 0)
 	    || (chown (backup, sb->st_uid, sb->st_gid) != 0)) {
 		unlink (backup);
 		return -1;

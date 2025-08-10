@@ -27,6 +27,7 @@
 #include "atoi/getnum.h"
 #include "commonio.h"
 #include "defines.h"
+#include "fs/creat/fmcreat.h"
 #include "nscd.h"
 #ifdef WITH_TCB
 #include <tcb.h>
@@ -243,19 +244,13 @@ static /*@null@*/ /*@dependent@*/FILE *fcreat_set_perms(
 	const struct stat *sb)
 {
 	FILE *fp;
-	mode_t mask;
 
-	mask = umask (0777);
-	fp = fopen (name, "w");
-	(void) umask (mask);
+	fp = fmcreat(name, sb->st_mode & 0664);
 	if (NULL == fp) {
 		return NULL;
 	}
 
 	if (fchown (fileno (fp), sb->st_uid, sb->st_gid) != 0) {
-		goto fail;
-	}
-	if (fchmod (fileno (fp), sb->st_mode & 0664) != 0) {
 		goto fail;
 	}
 
