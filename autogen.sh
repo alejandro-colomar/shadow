@@ -3,6 +3,7 @@
 autoreconf -v -f --install "$(dirname "$0")" || exit 1
 
 CC="/home/alx/src/llvm/llvm/opt/build/bin/clang"
+CPPFLAGS="-DUSE_OPTIONAL"
 CFLAGS="-O2"
 CFLAGS="$CFLAGS -Wall"
 CFLAGS="$CFLAGS -Wformat=2"
@@ -149,6 +150,7 @@ CFLAGS="$CFLAGS -Wno-unknown-warning-option"
 
 "$(dirname "$0")"/configure \
 	CC="$CC" \
+	CPPFLAGS="$CPPFLAGS" \
 	CFLAGS="$CFLAGS" \
 	--enable-lastlog \
 	--disable-logind \
