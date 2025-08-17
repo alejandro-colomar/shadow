@@ -46,9 +46,8 @@
 static int lrename (const char *, const char *);
 static int check_link_count (const char *file, bool log);
 static int do_lock_file (const char *file, const char *lock, bool log);
-static /*@null@*/ /*@dependent@*/FILE *fopen_set_perms (
+static /*@null@*/ /*@dependent@*/FILE *fcreat_set_perms (
 	const char *name,
-	const char *mode,
 	const struct stat *sb);
 static int create_backup (const char *, FILE *);
 static void free_linked_list (struct commonio_db *);
@@ -239,16 +238,15 @@ static int do_lock_file (const char *file, const char *lock, bool log)
 }
 
 
-static /*@null@*/ /*@dependent@*/FILE *fopen_set_perms (
+static /*@null@*/ /*@dependent@*/FILE *fcreat_set_perms(
 	const char *name,
-	const char *mode,
 	const struct stat *sb)
 {
 	FILE *fp;
 	mode_t mask;
 
 	mask = umask (0777);
-	fp = fopen (name, mode);
+	fp = fopen (name, "w");
 	(void) umask (mask);
 	if (NULL == fp) {
 		return NULL;
@@ -265,7 +263,7 @@ static /*@null@*/ /*@dependent@*/FILE *fopen_set_perms (
 
       fail:
 	(void) fclose (fp);
-	/* fopen_set_perms is used for intermediate files */
+	/* fcreat_set_perms() is used for intermediate files */
 	(void) unlink (name);
 	return NULL;
 }
@@ -282,7 +280,7 @@ static int create_backup (const char *backup, FILE * fp)
 		return -1;
 	}
 
-	bkfp = fopen_set_perms (backup, "w", &sb);
+	bkfp = fcreat_set_perms(backup, &sb);
 	if (NULL == bkfp) {
 		return -1;
 	}
@@ -966,7 +964,7 @@ int commonio_close (struct commonio_db *db)
 	}
 #endif
 
-	db->fp = fopen_set_perms (buf, "w", &sb);
+	db->fp = fcreat_set_perms(buf, &sb);
 	if (NULL == db->fp) {
 		goto fail;
 	}
