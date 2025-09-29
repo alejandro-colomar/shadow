@@ -19,6 +19,7 @@
 #include "shadow/gshadow/sgrp.h"
 #include "string/strchr/strchrcnt.h"
 #include "string/strcmp/streq.h"
+#include "string/strcpy/stpecpy.h"
 #include "string/strtok/stpsep.h"
 #include "string/strtok/strsep2arr.h"
 
@@ -36,9 +37,11 @@ sgetsgent(const char *s)
 	static struct sgrp  sgroup = {};
 
 	char    *fields[4];
-	size_t  n, nadm, nmem;
+	char    *end;
+	size_t  n, nadm, nmem, size;
 
 	n = strchrcnt(s, ',') + 4;
+	size = strlen(s) + 1;
 
 	free(buf);
 	buf = MALLOC(n, char *);
@@ -46,8 +49,12 @@ sgetsgent(const char *s)
 		return NULL;
 
 	free(p);
-	p = strdup(s);
+	p = MALLOC(size, char);
 	if (p == NULL)
+		return NULL;
+
+	end = p + size;
+	if (stpecpy(p, end, s) == NULL)
 		return NULL;
 
 	stpsep(p, "\n");
