@@ -22,17 +22,13 @@
  */
 
 
-#define a2i_(T, QChar, n, s, endp, base, min, max)                    \
-({                                                                    \
-	T      *n_ = n;                                               \
-	QChar  *s_ = s;                                               \
-	QChar  **endp_ = endp;                                        \
-	T      min_ = min;                                            \
-	T      max_ = max;                                            \
-                                                                      \
+#define a2i_(T, QChar, ...)                                           \
+((static inline int                                                   \
+  (T *n, QChar *s, QChar **endp, int base, T min, T max))             \
+{                                                                     \
 	int  status;                                                  \
                                                                       \
-	*n_ = _Generic((T) 0,                                         \
+	*n = _Generic(T,                                              \
 		short:              strtoi_,                          \
 		int:                strtoi_,                          \
 		long:               strtoi_,                          \
@@ -41,12 +37,12 @@
 		unsigned int:       strtou_noneg,                     \
 		unsigned long:      strtou_noneg,                     \
 		unsigned long long: strtou_noneg                      \
-	)(s_, endp_, base, min_, max_, &status);                      \
+	)(s, endp, base, min, max, &status);                          \
                                                                       \
 	if (status != 0)                                              \
 		errno = status;                                       \
-	-!!status;                                                    \
-})
+	return -!!status;                                             \
+}(__VA_ARGS__))
 
 
 // a2i - alpha to integer
