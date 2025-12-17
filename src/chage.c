@@ -69,7 +69,6 @@ static char user_name[BUFSIZ] = "";
 static uid_t user_uid = -1;
 
 static long lstchgdate;
-static long warndays;
 static long expdate;
 
 /* local function prototypes */
@@ -173,8 +172,6 @@ static int new_fields (void)
 		}
 	}
 
-	warndays = -1;
-
 	if (-1 == expdate || LONG_MAX / DAY < expdate)
 		strcpy(buf, "-1");
 	else
@@ -262,9 +259,6 @@ static void list_fields (void)
 	 */
 	(void) fputs (_("Account expires\t\t\t\t\t\t: "), stdout);
 	print_day_as_date(expdate);
-
-	printf (_("Number of days of warning before password expires\t: %ld\n"),
-	        warndays);
 }
 
 /*
@@ -528,7 +522,7 @@ static void update_age (/*@null@*/const struct spwd *sp,
 	spwent.sp_max = -1;
 	spwent.sp_min = -1;
 	spwent.sp_lstchg = lstchgdate;
-	spwent.sp_warn = warndays;
+	spwent.sp_warn = -1;
 	spwent.sp_inact = -1;
 	spwent.sp_expire = expdate;
 
@@ -553,7 +547,6 @@ static void get_defaults (/*@null@*/const struct spwd *sp)
 		if (!dflg) {
 			lstchgdate = sp->sp_lstchg;
 		}
-		warndays = sp->sp_warn;
 		if (!Eflg) {
 			expdate = sp->sp_expire;
 		}
@@ -565,7 +558,6 @@ static void get_defaults (/*@null@*/const struct spwd *sp)
 		if (!dflg) {
 			lstchgdate = -1;
 		}
-		warndays = -1;
 		if (!Eflg) {
 			expdate = -1;
 		}
